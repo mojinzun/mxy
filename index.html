@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<title>移动端3D旋转相册</title>
+		<style type="text/css">
+			*{
+			    margin: 0;
+			    padding: 0;
+			    box-sizing: border-box;
+			}
+			body{
+			    background: url(img/triangles.png);
+			    min-height: 100vh;
+			    display: flex;
+			    justify-content: center;
+			    align-items: center;
+			    overflow: hidden;
+			}
+			.cube1{
+			    width: 280px;
+			    height: 280px;
+			    position: relative;
+			    /* 声明3D结构 */
+			    transform-style: preserve-3d;
+			    animation: cube 15s linear infinite;
+			    /* 触摸设备上禁用文本选择 */
+			    -webkit-user-select: none;
+			    user-select: none;
+			}
+			.list_01{
+			    width: 100%;
+			    height: 100%;
+			    position: absolute;
+			    list-style: none;
+			    transition: all 1.5s ease;
+			    backface-visibility: hidden;
+			}
+			.list_01 img{
+			    width: 100%;
+			    height: 100%;
+			    object-fit: cover;
+			    border: 2px solid rgba(255, 255, 255, 0.8);
+			    border-radius: 4px;
+			    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+			}
+			/* 正面 */
+			.list_01:nth-child(1){
+			    transform: translateZ(140px);
+			}
+			/* 背面 */
+			.list_01:nth-child(2){
+			    transform: rotateY(180deg) translateZ(140px);
+			}
+			/* 左面 */
+			.list_01:nth-child(3){
+			    transform: rotateY(-90deg) translateZ(140px);
+			}
+			/* 右面 */
+			.list_01:nth-child(4){
+			    transform: rotateY(90deg) translateZ(140px);
+			}
+			/* 上面 */
+			.list_01:nth-child(5){
+			    transform: rotateX(90deg) translateZ(140px);
+			}
+			/* 底面 */
+			.list_01:nth-child(6){
+			    transform: rotateX(-90deg) translateZ(140px);
+			}
+			
+			/* 激活状态 - 散开效果 */
+			.cube1.active .list_01:nth-child(1){
+			    transform: translateZ(280px);
+			}
+			
+			.cube1.active .list_01:nth-child(2){
+			    transform: rotateY(180deg) translateZ(280px);
+			}
+			
+			.cube1.active .list_01:nth-child(3){
+			    transform: rotateY(-90deg) translateZ(280px);
+			}
+			.cube1.active .list_01:nth-child(4){
+			    transform: rotateY(90deg) translateZ(280px);
+			}
+			.cube1.active .list_01:nth-child(5){
+			    transform: rotateX(90deg) translateZ(280px);
+			}
+			.cube1.active .list_01:nth-child(6){
+			    transform: rotateX(-90deg) translateZ(280px);
+			}
+			
+			
+			/* 第二个立方体 */
+			.cube2{
+			    width: 140px;
+			    height: 140px;
+			    position: absolute;
+			    left: 0;
+			    top: 0;
+			    right: 0;
+			    bottom: 0;
+			    margin: auto;
+			    /* 声明3D结构 */
+			    transform-style: preserve-3d;
+			    animation: cube 10s linear infinite reverse;
+			}
+			.cube2 li{
+			    width: 100%;
+			    height: 100%;
+			    position: absolute;
+			    list-style: none;
+			    transition: all 1.5s ease;
+			    backface-visibility: hidden;
+			}
+			.cube2 li img{
+			    width: 100%;
+			    height: 100%;
+			    object-fit: cover;
+			    border: 2px solid rgba(255, 255, 255, 0.8);
+			    border-radius: 4px;
+			    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+			}
+			.cube2 li:nth-child(1){
+			    transform: translateZ(70px);
+			}
+			.cube2 li:nth-child(2){
+			    transform: rotateY(180deg) translateZ(70px);
+			}
+			.cube2 li:nth-child(3){
+			    transform: rotateY(-90deg) translateZ(70px);
+			}
+			.cube2 li:nth-child(4){
+			    transform: rotateY(90deg) translateZ(70px);
+			}
+			.cube2 li:nth-child(5){
+			    transform: rotateX(90deg) translateZ(70px);
+			}
+			.cube2 li:nth-child(6){
+			    transform: rotateX(-90deg) translateZ(70px);
+			}
+			
+			/* 小立方体激活状态 - 单独使用active-inner类触发 */
+			.cube1.active-inner .cube2 li:nth-child(1){
+			    transform: translateZ(140px);
+			}
+			
+			.cube1.active-inner .cube2 li:nth-child(2){
+			    transform: rotateY(180deg) translateZ(140px);
+			}
+			
+			.cube1.active-inner .cube2 li:nth-child(3){
+			    transform: rotateY(-90deg) translateZ(140px);
+			}
+			.cube1.active-inner .cube2 li:nth-child(4){
+			    transform: rotateY(90deg) translateZ(140px);
+			}
+			.cube1.active-inner .cube2 li:nth-child(5){
+			    transform: rotateX(90deg) translateZ(140px);
+			}
+			.cube1.active-inner .cube2 li:nth-child(6){
+			    transform: rotateX(-90deg) translateZ(140px);
+			}
+			
+			@keyframes cube{
+			    from{
+			        transform: rotate3d(1,1,1,0deg);
+			    }
+			    to{
+			        transform: rotate3d(1,1,1,360deg);
+			    }
+			}
+			
+			/* 媒体查询，适配不同屏幕尺寸 */
+			@media (max-width: 320px) {
+			    .cube1 {
+			        width: 200px;
+			        height: 200px;
+			    }
+			    .list_01:nth-child(1) {
+			        transform: translateZ(100px);
+			    }
+			    .list_01:nth-child(2) {
+			        transform: rotateY(180deg) translateZ(100px);
+			    }
+			    .list_01:nth-child(3) {
+			        transform: rotateY(-90deg) translateZ(100px);
+			    }
+			    .list_01:nth-child(4) {
+			        transform: rotateY(90deg) translateZ(100px);
+			    }
+			    .list_01:nth-child(5) {
+			        transform: rotateX(90deg) translateZ(100px);
+			    }
+			    .list_01:nth-child(6) {
+			        transform: rotateX(-90deg) translateZ(100px);
+			    }
+			    
+			    .cube2 {
+			        width: 100px;
+			        height: 100px;
+			    }
+			    .cube2 li:nth-child(1) {
+			        transform: translateZ(50px);
+			    }
+			    .cube2 li:nth-child(2) {
+			        transform: rotateY(180deg) translateZ(50px);
+			    }
+			    .cube2 li:nth-child(3) {
+			        transform: rotateY(-90deg) translateZ(50px);
+			    }
+			    .cube2 li:nth-child(4) {
+			        transform: rotateY(90deg) translateZ(50px);
+			    }
+			    .cube2 li:nth-child(5) {
+			        transform: rotateX(90deg) translateZ(50px);
+			    }
+			    .cube2 li:nth-child(6) {
+			        transform: rotateX(-90deg) translateZ(50px);
+			    }
+			}
+		</style>
+	</head>
+	<body>
+		<ul class="cube1" id="cube1">
+			<!-- 外部立方体 -->
+		    <li class="list_01"><img src="img/ic_img01.jpg" alt="图片1"></li>
+		    <li class="list_01"><img src="img/ic_img02.jpg" alt="图片2"></li>
+		    <li class="list_01"><img src="img/ic_img03.jpg" alt="图片3"></li>
+		    <li class="list_01"><img src="img/ic_img04.jpg" alt="图片4"></li>
+		    <li class="list_01"><img src="img/ic_img05.jpg" alt="图片5"></li>
+		    <li class="list_01"><img src="img/ic_img06.jpg" alt="图片6"></li>
+			
+			<!-- 内部立方体 -->
+			<ul class="cube2">
+			    <li><img src="img/ic_img07.jpg" alt="内部图片1"></li>
+			    <li><img src="img/ic_img08.jpg" alt="内部图片2"></li>
+			    <li><img src="img/ic_img09.jpg" alt="内部图片3"></li>
+			    <li><img src="img/ic_img10.jpg" alt="内部图片4"></li>
+			    <li><img src="img/ic_img11.jpg" alt="内部图片5"></li>
+			    <li><img src="img/ic_img12.jpg" alt="内部图片6"></li>
+			</ul>
+		</ul>
+
+		<script type="text/javascript">
+			// 获取立方体元素
+			const cube1 = document.getElementById('cube1');
+			let isActive = false;
+			
+			// 点击事件处理函数 - 添加点击计数逻辑
+			let clickCount = 0;
+			function handleClick() {
+			    clickCount++;
+			    
+			    if (clickCount === 1) {
+			        // 第一次点击 - 只展开外部立方体
+			        cube1.classList.add('active');
+			        cube1.classList.remove('active-inner');
+			    } else if (clickCount === 2) {
+			        // 第二次点击 - 展开内部立方体
+			        cube1.classList.add('active-inner');
+			    } else {
+			        // 第三次点击 - 重置所有状态
+			        clickCount = 0;
+			        cube1.classList.remove('active');
+			        cube1.classList.remove('active-inner');
+			    }
+			}
+			
+			// 为立方体添加点击事件
+			cube1.addEventListener('click', handleClick);
+			
+			// 为触摸设备添加触摸事件
+			cube1.addEventListener('touchstart', function(e) {
+			    e.preventDefault(); // 防止触发鼠标事件
+			    handleClick();
+			}, { passive: false });
+		</script>
+	</body>
+</html>
